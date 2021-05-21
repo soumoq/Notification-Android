@@ -8,6 +8,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -42,10 +44,16 @@ public class MainActivity extends AppCompatActivity {
                 broadcastIntent.putExtra("toast","Hi I'm channel one");
                 PendingIntent actionIntent = PendingIntent.getBroadcast(v.getContext(),0,broadcastIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
+                Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),R.drawable.person_dp);
+
                 Notification notification = new NotificationCompat.Builder(v.getContext(),App.CHANNEL_1_ID)
                         .setSmallIcon(R.drawable.ic_baseline_exposure_plus_1_24)
                         .setContentTitle("Channel_1")
                         .setContentText("This is channel 1")
+                        .setLargeIcon(largeIcon)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.long_dummy_text))
+                        .setBigContentTitle("Bit content title")
+                        .setSummaryText("Summery text"))
                         .setPriority(Notification.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                         .setColor(Color.BLUE)
