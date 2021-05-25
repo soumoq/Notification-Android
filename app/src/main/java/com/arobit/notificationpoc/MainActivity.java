@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.session.MediaSession;
 import android.os.Bundle;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Button channel2;
 
     private NotificationManagerCompat notificationManager;
+    private MediaSessionCompat mediaSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         channel2 = findViewById(R.id.channel_2);
 
         notificationManager = NotificationManagerCompat.from(this);
+        mediaSession = new MediaSessionCompat(this,"MediaSessionCompat");
 
 
         channel1.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +73,21 @@ public class MainActivity extends AppCompatActivity {
         channel2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap artWork = BitmapFactory.decodeResource(getResources(),R.drawable.person_dp);
+
+
                 Notification notification = new NotificationCompat.Builder(v.getContext(),App.CHANNEL_2_ID)
                         .setSmallIcon(R.drawable.ic_baseline_exposure_plus_1_24)
                         .setContentTitle("Channel_2")
                         .setContentText("This is channel 2")
+                        .setLargeIcon(artWork)
+                        .addAction(R.drawable.ic_baseline_skip_previous_24,"Previous",null)
+                        .addAction(R.drawable.ic_baseline_pause_24,"Pause",null)
+                        .addAction(R.drawable.ic_baseline_skip_next_24,"Next",null)
+                        .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(0,1,2)
+                        .setMediaSession(mediaSession.getSessionToken()))
+                        .setSubText("Sub Text")
                         .setPriority(Notification.PRIORITY_LOW)
                         .build();
                 notificationManager.notify(2,notification);
